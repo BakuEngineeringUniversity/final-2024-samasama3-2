@@ -14,7 +14,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        val fullNameEditText = findViewById<EditText>(R.id.fullNameEditText)
+        val fullNameEditText = findViewById<EditText>(R.id.firstNameEditText)
         val emailEditText = findViewById<EditText>(R.id.emailEditText)
         val passwordEditText = findViewById<EditText>(R.id.registerPasswordEditText)
         val registerButton = findViewById<Button>(R.id.registerButton)

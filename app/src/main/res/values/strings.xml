@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">PetPal</string>
+    <string name="app_logo">App Logo</string>
+    <string name="full_name_hint">Full Name</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="login_prompt">Have an account? Login</string>
+    <string name="register_button">Register</string>
 </resources>
