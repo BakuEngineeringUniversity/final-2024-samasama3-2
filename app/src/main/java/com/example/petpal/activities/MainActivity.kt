@@ -1,5 +1,6 @@
-package com.example.petpal
+package com.example.petpal.activities
 
+import com.example.petpal.R
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity

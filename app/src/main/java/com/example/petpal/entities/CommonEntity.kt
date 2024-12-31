@@ -1,10 +1,17 @@
 package com.example.petpal.entities
 
-import java.time.LocalDateTime
+import java.text.SimpleDateFormat
+import java.util.*
 
-data class CommonEntity(
+open class CommonEntity(
     val id: Long = 0,
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-    val updatedAt: LocalDateTime = LocalDateTime.now()
-)
-
+    val createdAt: String = getCurrentTime(),
+    var updatedAt: String = getCurrentTime()
+) {
+    companion object {
+        private fun getCurrentTime(): String {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+            return dateFormat.format(Date())
+        }
+    }
+}

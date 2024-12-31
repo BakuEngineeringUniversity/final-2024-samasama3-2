@@ -1,5 +1,9 @@
 package com.example.petpal.dtos
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class RegisterUserDto(
     val email: String,
     val firstName: String,
@@ -7,8 +11,8 @@ data class RegisterUserDto(
     val password: String,
     val phoneNumber: String,
     val address: String,
-    val name: String,
-    val sex: String,
-    val type: String,
-    val age: Int
-)
+    val petName: String,
+    val petSex: String,
+    val petType: String,
+    val petAge: Int
+) : Parcelable

@@ -1,5 +1,7 @@
-package com.example.petpal
+package com.example.petpal.activities
 
+
+import com.example.petpal.R
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
