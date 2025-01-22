@@ -1,9 +1,30 @@
 <resources>
+    <!-- General -->
     <string name="app_name">PetPal</string>
     <string name="app_logo">App Logo</string>
-    <string name="full_name_hint">Full Name</string>
-    <string name="email_hint">Email</string>
-    <string name="password_hint">Password</string>
-    <string name="login_prompt">Have an account? Login</string>
+
+    <!-- Login Screen -->
+    <string name="login_user_label">Welcome back!!</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_button">Login</string>
+    <string name="login_register_prompt">Dont have an account? Register</string>
+
+    <!-- Register Screen -->
+    <string name="register_full_name_hint">Full Name(e.g, Sama)</string>
+    <string name="register_surname_hint">Surname(e.g, Baliyeva)</string>
+    <string name="register_user_label">Let’s Get You Started!!</string>
+    <string name="register_email_hint">Email</string>
+    <string name="register_password_hint">Password</string>
+    <string name="register_phone_number_hint">Phone Number (e.g., 1234567890)</string>
+    <string name="register_address_hint">Address (e.g., Baku, Azerbaijan)</string>
+    <string name="continue_button">Next</string>
+
+    <!-- Pet Registration -->
+    <string name="register_pet_label">Now, Tell Us About Your Pet!!</string>
+    <string name="pet_name_hint">Pet Name (e.g., Max)</string>
+    <string name="pet_type_hint">Pet Type (e.g., Dog)</string>
+    <string name="pet_sex_hint">Select Pet Sex</string>
+    <string name="pet_age_hint">Pet Age (e.g., 3)</string>
     <string name="register_button">Register</string>
 </resources>

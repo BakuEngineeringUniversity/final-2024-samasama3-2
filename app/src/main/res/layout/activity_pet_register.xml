@@ -21,11 +21,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/userLoginLabel"
+        android:id="@+id/petSignUpLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="@string/login_user_label"
+        android:text="@string/register_pet_label"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -35,60 +35,68 @@
         app:layout_constraintTop_toBottomOf="@id/logoImageView" />
 
     <EditText
-        android:id="@+id/emailEditText"
+        android:id="@+id/petNameEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:hint="@string/login_email_hint"
-        android:inputType="textEmailAddress"
+        android:hint="@string/pet_name_hint"
+        android:inputType="text"
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userLoginLabel" />
-
+        app:layout_constraintTop_toBottomOf="@id/petSignUpLabel" />
 
     <EditText
-        android:id="@+id/loginPasswordEditText"
+        android:id="@+id/petTypeEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="@string/login_password_hint"
-        android:inputType="textPassword"
+        android:layout_marginTop="40dp"
+        android:hint="@string/pet_type_hint"
+        android:inputType="text"
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/emailEditText" />
+        app:layout_constraintTop_toBottomOf="@id/petNameEditText" />
+
+    <Spinner
+        android:id="@+id/petSexSpinner"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/spinner_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/petTypeEditText" />
+
+    <EditText
+        android:id="@+id/petAgeEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:hint="@string/pet_age_hint"
+        android:inputType="number"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/petSexSpinner" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/registerButton"
         android:layout_width="210dp"
         android:layout_height="60dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="160dp"
         android:backgroundTint="@color/electric"
         android:padding="12dp"
-        android:text="@string/login_button"
+        android:text="@string/register_button"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginPasswordEditText" />
-
-    <TextView
-        android:id="@+id/loginRegisterLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="@string/login_register_prompt"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginButton" />
-
+        app:layout_constraintTop_toBottomOf="@id/petAgeEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

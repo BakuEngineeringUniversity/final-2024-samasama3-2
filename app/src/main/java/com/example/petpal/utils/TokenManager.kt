@@ -1,15 +1,29 @@
 package com.example.petpal.utils
 
 import android.content.Context
+import android.content.SharedPreferences
 
-class TokenManager(private val context: Context) {
-    private val sharedPreferences = context.getSharedPreferences("PetPalPrefs", Context.MODE_PRIVATE)
+class TokenManager(context: Context) {
 
-    fun saveToken(token: String) {
-        sharedPreferences.edit().putString("jwt_token", token).apply()
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("petpal_prefs", Context.MODE_PRIVATE)
+
+    companion object {
+        private const val TOKEN_KEY = "jwt_token"
     }
 
+    // Save the token
+    fun saveToken(token: String) {
+        sharedPreferences.edit().putString(TOKEN_KEY, token).apply()
+    }
+
+    // Retrieve the token
     fun getToken(): String? {
-        return sharedPreferences.getString("jwt_token", null)
+        return sharedPreferences.getString(TOKEN_KEY, null)
+    }
+
+    // Clear the token
+    fun clearToken() {
+        sharedPreferences.edit().remove(TOKEN_KEY).apply()
     }
 }

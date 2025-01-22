@@ -1,29 +1,31 @@
 [versions]
-kotlin = "1.9.24"
+kotlin = "1.9.0"
 agp = "8.1.1"
-coreKtx = "1.15.0"
+coreKtx = "1.12.0"
 appcompat = "1.7.0"
 material = "1.12.0"
-activity = "1.9.3"
+activity = "1.9.0"
 constraintlayout = "2.2.0"
 retrofit = "2.9.0"
-okhttp-logging-interceptor = "4.11.0"
+okhttp = "4.11.0"
 junit = "4.13.2"
-espressoCore = "3.6.1"
+espresso = "3.6.1"
+activityVersion = "1.8.0"
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+android-application = { id = "com.android.application", version = "8.7.3" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.0" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version = "1.9.0" }
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
-okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp-logging-interceptor" }
-junit = { group = "junit", name = "junit", version = "4.13.2" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activityVersion" }

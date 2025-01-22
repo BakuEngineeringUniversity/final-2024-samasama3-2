@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0E1E6D"
-    tools:context=".OnBoarding0">
+    tools:context=".activities.OnBoarding0">
 
     <ImageSwitcher
         android:id="@+id/large_image_switcher"

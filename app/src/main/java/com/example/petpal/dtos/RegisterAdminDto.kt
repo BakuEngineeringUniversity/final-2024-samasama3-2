@@ -1,14 +1,10 @@
 package com.example.petpal.dtos
 
-data class RegisterUserDto(
+data class RegisterAdminDto(
     val email: String,
     val firstName: String,
     val surname: String,
     val password: String,
     val phoneNumber: String,
-    val address: String,
-    val petName: String,
-    val petType: String,
-    val petSex: String,
-    val petAge: Int
+    val address: String
 )
