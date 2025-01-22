@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0E1E6D"
+    android:background="@color/denim"
     tools:context=".activities.OnBoarding0">
 
     <ImageSwitcher
@@ -23,15 +23,41 @@
 
     </ImageSwitcher>
 
-    <ImageSwitcher
-        android:id="@+id/small_image_switcher"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
+    <LinearLayout
+        android:id="@+id/small_text_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:scaleType="fitCenter"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/large_image_switcher"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Header Text -->
+        <TextView
+            android:id="@+id/header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:fontFamily="serif" />
+
+        <!-- Subtext -->
+        <TextView
+            android:id="@+id/sub_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:layout_marginTop="18dp"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:fontFamily="serif" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/indicator_layout"

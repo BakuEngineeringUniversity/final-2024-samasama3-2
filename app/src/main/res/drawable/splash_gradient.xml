@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <gradient
+                android:type="linear"
+                android:angle="45"
+                android:startColor="@color/midnight"
+                android:centerColor="@color/whale"
+                android:endColor="@color/denim"
+                android:useLevel="false">
+                <item android:offset="0.4" android:color="@color/midnight" />
+                <item android:offset="0.6" android:color="@color/whale" />
+                <item android:offset="1.0" android:color="@color/denim" />
+            </gradient>
+        </shape>
+    </item>
+</layer-list>
