@@ -63,6 +63,13 @@
                 android:padding="12dp"
                 android:textSize="18sp" />
 
+            <Spinner
+                android:id="@+id/petSexSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/spinner_background" />
+
             <!-- Pet Type Input -->
             <EditText
                 android:id="@+id/petTypeEditText"
@@ -75,12 +82,7 @@
                 android:textSize="18sp" />
 
             <!-- Pet Sex Spinner -->
-            <Spinner
-                android:id="@+id/petSexSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/spinner_background" />
+
 
             <!-- Pet Age Input -->
             <EditText

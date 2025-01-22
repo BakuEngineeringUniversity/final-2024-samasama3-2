@@ -51,6 +51,16 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
+            <EditText
+                android:id="@+id/emailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="@string/register_email_hint"
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
+                android:textSize="18sp" />
+
             <!-- First Name Input -->
             <EditText
                 android:id="@+id/firstNameEditText"
@@ -73,15 +83,6 @@
                 android:textSize="18sp" />
 
             <!-- Email Input -->
-            <EditText
-                android:id="@+id/emailEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="@string/register_email_hint"
-                android:inputType="textEmailAddress"
-                android:padding="12dp"
-                android:textSize="18sp" />
 
             <!-- Password Input -->
             <EditText
