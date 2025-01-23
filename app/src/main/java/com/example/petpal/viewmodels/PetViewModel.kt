@@ -55,15 +55,16 @@ class PetViewModel : ViewModel() {
             try {
                 val response = ApiClient.apiService.getPetsByUserId(userId)
                 if (response.isSuccessful && response.body() != null) {
-                    _pets.value = response.body()
+                    _pets.value = response.body()?.data ?: emptyList()
                 } else {
-                    Log.e("PetViewModel", "Failed to fetch pets: ${response.message()}")
+                    _error.value = "Failed to fetch pets: ${response.message()}"
                 }
             } catch (e: Exception) {
-                Log.e("PetViewModel", "Error fetching pets: ${e.message}")
+                _error.value = "Error fetching pets: ${e.message}"
             }
         }
     }
+
 
     // Update pet details
     fun updatePetDetails(petId: Long, petUpdateModel: PetUpdateModel) {

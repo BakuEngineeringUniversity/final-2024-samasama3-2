@@ -13,15 +13,15 @@ import androidx.lifecycle.Observer
 import com.example.petpal.R
 import com.example.petpal.models.LoginUserModel
 import com.example.petpal.utils.TokenManager
-import com.example.petpal.api.ApiClient
 import com.example.petpal.utils.decodeJwt
+import com.example.petpal.api.ApiClient
 import com.example.petpal.viewmodels.AuthViewModel
 import com.example.petpal.viewmodels.PetViewModel
 
 class LoginActivity : AppCompatActivity() {
 
     private val authViewModel: AuthViewModel by viewModels()
-    private val petViewModel: PetViewModel by viewModels() // Added PetViewModel for fetching pet data
+    private val petViewModel: PetViewModel by viewModels()
     private lateinit var tokenManager: TokenManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +57,8 @@ class LoginActivity : AppCompatActivity() {
                         tokenManager.saveToken(token) // Save the token
                         ApiClient.setAuthToken(token) // Set the token in ApiClient
 
-                        // Navigate to HomePageActivity
-                        navigateToHomePage(userId)
+                        // Fetch pets for the user
+                        fetchPetsAndNavigate(userId)
                     } else {
                         Log.e("LoginActivity", "Failed to decode userId from token")
                         showToast("Login failed: Could not extract userId.")
@@ -72,8 +72,6 @@ class LoginActivity : AppCompatActivity() {
                 showToast(response.message ?: "Login failed!")
             }
         })
-
-
 
         // Handle login button click
         loginButton.setOnClickListener {
@@ -91,24 +89,22 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchAndNavigateToHome(userId: Long) {
+    private fun fetchPetsAndNavigate(userId: Long) {
         Log.d("LoginActivity", "Fetching pets for userId: $userId")
 
-        petViewModel.fetchPetsByUserId(userId) // Fetch pets using the userId
+        petViewModel.fetchPetsByUserId(userId)
 
-        // Observe fetched pets
         petViewModel.pets.observe(this, Observer { pets ->
-            if (pets != null && pets.isNotEmpty()) {
-                val firstPetId = pets[0].id // Use the first pet's ID
+            if (!pets.isNullOrEmpty()) {
+                val firstPetId = pets[0].id
                 Log.d("LoginActivity", "Fetched first Pet ID: $firstPetId")
                 navigateToHomePage(firstPetId)
             } else {
-                Log.e("LoginActivity", "No pets found for the user.")
+                Log.e("LoginActivity", "No pets found for this user.")
                 showToast("No pets found. Please create one to proceed.")
             }
         })
 
-        // Observe errors during fetching
         petViewModel.error.observe(this, Observer { errorMessage ->
             if (!errorMessage.isNullOrEmpty()) {
                 Log.e("LoginActivity", "Error fetching pets: $errorMessage")
