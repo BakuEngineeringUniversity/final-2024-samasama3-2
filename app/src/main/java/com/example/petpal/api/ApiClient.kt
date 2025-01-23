@@ -11,7 +11,9 @@ import java.util.concurrent.TimeUnit
 
 object ApiClient {
 
-    private const val BASE_URL = "http://10.0.2.2:9090/"
+    val BASE_URL = "http://192.168.0.105:9090"
+
+
 
     // Token storage (Replace with a secure method like SharedPreferences in real apps)
     private var authToken: String? = null

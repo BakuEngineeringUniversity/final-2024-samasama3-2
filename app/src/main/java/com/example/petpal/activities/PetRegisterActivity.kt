@@ -1,35 +1,32 @@
 package com.example.petpal.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petpal.R
-import com.example.petpal.api.ApiClient
-import com.example.petpal.api.ApiService
 import com.example.petpal.models.RegisterUserModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.petpal.viewmodels.AuthViewModel
 
 class PetRegisterActivity : AppCompatActivity() {
 
     private lateinit var petSexSpinner: Spinner
     private var selectedPetSex: String? = null
-    private val apiService: ApiService by lazy { ApiClient.apiService } // Using global ApiClient
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pet_register)
 
         // Retrieve user data from Intent
-        val firstName = intent.getStringExtra("firstName")
-        val surname = intent.getStringExtra("surname")
-        val email = intent.getStringExtra("email")
-        val password = intent.getStringExtra("password")
-        val phoneNumber = intent.getStringExtra("phoneNumber")
-        val address = intent.getStringExtra("address")
+        val firstName = intent.getStringExtra("firstName").orEmpty()
+        val surname = intent.getStringExtra("surname").orEmpty()
+        val email = intent.getStringExtra("email").orEmpty()
+        val password = intent.getStringExtra("password").orEmpty()
+        val phoneNumber = intent.getStringExtra("phoneNumber").orEmpty()
+        val address = intent.getStringExtra("address").orEmpty()
 
         val petNameEditText = findViewById<EditText>(R.id.petNameEditText)
         val petTypeEditText = findViewById<EditText>(R.id.petTypeEditText)
@@ -37,79 +34,92 @@ class PetRegisterActivity : AppCompatActivity() {
         val registerButton = findViewById<Button>(R.id.registerButton)
         petSexSpinner = findViewById(R.id.petSexSpinner)
 
-        // Map pet sex options
-        val petSexOptions = mapOf(
-            "Select Pet Sex" to null,
-            "Male" to "MALE",
-            "Female" to "FEMALE"
-        )
+        setupPetSexSpinner()
 
-        // Populate spinner with user-friendly options
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, petSexOptions.keys.toList())
+        // Register button click listener
+        registerButton.setOnClickListener {
+            val petName = petNameEditText.text.toString()
+            val petType = petTypeEditText.text.toString()
+            val petAge = petAgeEditText.text.toString().toIntOrNull()
+
+            if (validateFields(petName, petType, petAge)) {
+                val registerUserModel = RegisterUserModel(
+                    email = email,
+                    firstName = firstName,
+                    surname = surname,
+                    password = password,
+                    phoneNumber = phoneNumber,
+                    address = address,
+                    petName = petName,
+                    petType = petType,
+                    petSex = selectedPetSex.orEmpty(),
+                    petAge = petAge!!
+                )
+
+                authViewModel.registerUser(registerUserModel)
+            } else {
+                showToast("Please fill in all fields correctly.")
+            }
+        }
+
+        observeRegistrationResponse()
+    }
+
+    private fun setupPetSexSpinner() {
+        val petSexOptions = listOf("Select Pet Sex", "Male", "Female")
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, petSexOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         petSexSpinner.adapter = adapter
 
         petSexSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedLabel = petSexSpinner.selectedItem.toString()
-                selectedPetSex = petSexOptions[selectedLabel]
+                selectedPetSex = when (position) {
+                    1 -> "MALE"
+                    2 -> "FEMALE"
+                    else -> null
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 selectedPetSex = null
             }
         }
+    }
 
-        // Register button click listener
-        registerButton.setOnClickListener {
-            val petName = petNameEditText.text.toString()
-            val petType = petTypeEditText.text.toString()
-            val petAge = petAgeEditText.text.toString().toIntOrNull() ?: 0
+    private fun observeRegistrationResponse() {
+        authViewModel.authResponse.observe(this) { response ->
+            if (response.status == "success") {
+                // Ensure data is a list and extract the first item's id
+                val data = response.data as? List<Map<String, Any>>
+                val petId = data?.firstOrNull()?.get("id") as? Int
+                println("Response data: ${response.data}")
 
-            if (petName.isNotBlank() && petType.isNotBlank() && petAge > 0 && selectedPetSex != null) {
-                val registerUserModel = RegisterUserModel(
-                    email = email ?: "",
-                    firstName = firstName ?: "",
-                    surname = surname ?: "",
-                    password = password ?: "",
-                    phoneNumber = phoneNumber ?: "",
-                    address = address ?: "",
-                    petName = petName,
-                    petType = petType,
-                    petSex = selectedPetSex ?: "",
-                    petAge = petAge
-                )
-
-                // Log the payload being sent
-                println("RegisterUserDto: $registerUserModel")
-
-                // Call the API to register the user
-                registerUser(registerUserModel)
+                if (petId != null) {
+                    navigateToHomePage(petId.toLong()) // Convert to Long if needed
+                } else {
+                    showToast("Registration successful, but pet ID is missing.")
+                }
             } else {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                showToast(response.message ?: "An error occurred during registration.")
             }
         }
     }
 
-    private fun registerUser(registerUserModel: RegisterUserModel) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = apiService.registerUser(registerUserModel)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(this@PetRegisterActivity, "Registration successful!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                        println("Error response: $errorMessage")
-                        Toast.makeText(this@PetRegisterActivity, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    println("Network error: ${e.message}")
-                    Toast.makeText(this@PetRegisterActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
+
+    private fun navigateToHomePage(petId: Long) {
+        val intent = Intent(this, HomePageActivity::class.java).apply {
+            putExtra("PET_ID", petId)
         }
+        startActivity(intent)
+        finish()
+    }
+
+    private fun validateFields(petName: String, petType: String, petAge: Int?): Boolean {
+        return petName.isNotBlank() && petType.isNotBlank() && petAge != null && petAge > 0 && selectedPetSex != null
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

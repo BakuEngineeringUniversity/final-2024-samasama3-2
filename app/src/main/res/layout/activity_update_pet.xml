@@ -24,6 +24,8 @@
     <!-- CardView Container -->
     <androidx.cardview.widget.CardView
         android:id="@+id/formCardView"
+        app:cardBackgroundColor="@color/white"
+        android:alpha="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -42,6 +44,8 @@
             <!-- Pet Name -->
             <EditText
                 android:id="@+id/nameEditText"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/darker_gray"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/update_pet_name_hint"
@@ -55,6 +59,8 @@
             <!-- Pet Type -->
             <EditText
                 android:id="@+id/typeEditText"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/darker_gray"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/update_pet_type_hint"
@@ -76,6 +82,8 @@
             <!-- Pet Age -->
             <EditText
                 android:id="@+id/ageEditText"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/darker_gray"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/update_pet_age_hint"

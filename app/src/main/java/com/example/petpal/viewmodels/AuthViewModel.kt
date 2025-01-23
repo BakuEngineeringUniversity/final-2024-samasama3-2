@@ -27,12 +27,19 @@ class AuthViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = apiService.registerUser(registerUserModel)
-                processResponse(response, _authResponse)
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    _authResponse.postValue(responseBody)
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                    _authResponse.postValue(ApiResponse("error", errorMessage, null))
+                }
             } catch (e: Exception) {
                 _authResponse.postValue(ApiResponse("error", "An error occurred: ${e.message}", null))
             }
         }
     }
+
 
     // Login a user
     fun loginUser(loginUserDto: LoginUserModel) {
