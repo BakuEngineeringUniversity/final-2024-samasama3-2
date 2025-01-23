@@ -37,4 +37,40 @@
     <string name="pet_sex_hint">Select Pet Sex</string>
     <string name="pet_age_hint">Pet Age (e.g., 3)</string>
     <string name="register_button">Register</string>
+
+    <string name="welcome_back">This is, [Pet Name] diary </string>
+    <string name="welcome_subtext">Take a look at how the day was planned for your pet </string>
+
+    <!-- Calendar Section -->
+    <string name="calendar_date_jan_21">Jan 21</string>
+    <string name="calendar_date_jan_22">Jan 22</string>
+    <string name="calendar_date_jan_23">Jan 23</string>
+    <string name="calendar_date_jan_24">Jan 24</string>
+    <string name="calendar_date_jan_25">Jan 25</string>
+    <string name="calendar_date_jan_26">Jan 26</string>
+
+    <!-- CardView Sections -->
+    <string name="todays_daily_habits">Todays Daily Habits</string>
+    <string name="habit_brush_teeth">Brush Teeth</string>
+    <string name="habit_give_breakfast">Give Breakfast</string>
+    <string name="habit_give_lunch">Give Lunch</string>
+    <string name="habit_give_dinner">Give Dinner</string>
+    <string name="habit_walk_with_pet">Walk with [Pet Name]</string>
+    <string name="habit_play_outside">Play Outside</string>
+
+    <string name="todays_special_events">Todays Special Events</string>
+    <string name="event_bath">Bath</string>
+    <string name="event_play_football">Play Football</string>
+    <string name="event_watch_movie">Watch a movie</string>
+    <string name="event_meet_tommy">Meet Tommy</string>
+
+    <!-- Action Buttons -->
+    <string name="update_pet_info">Update Pet Info</string>
+    <string name="delete_pet">Delete Pet</string>
+    <string name="delete_pet_confirmation">Are you sure you want to delete this pet?</string>
+    <string name="yes_button">Yes</string>
+    <string name="no_button">No</string>
+    <string name="pet_type_placeholder">Type: [Pet Type]</string>
+    <string name="pet_age_placeholder">Age: [Pet Age]</string>
+
 </resources>
