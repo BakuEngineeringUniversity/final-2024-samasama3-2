@@ -10,8 +10,14 @@ import com.example.petpal.api.ApiResponse
 import com.example.petpal.models.PetModel
 import com.example.petpal.models.PetUpdateModel
 import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class PetViewModel : ViewModel() {
+    private val _currentUserId = MutableLiveData<Long>()
+    val currentUserId: LiveData<Long> get() = _currentUserId
+
+    private val _deleteResult = MutableLiveData<Boolean>()
+    val deleteResult: LiveData<Boolean> get() = _deleteResult
 
     private val _pets = MutableLiveData<List<PetModel>>()
     val pets: LiveData<List<PetModel>> get() = _pets
@@ -65,6 +71,41 @@ class PetViewModel : ViewModel() {
         }
     }
 
+    fun deletePet(petId: Long) {
+        viewModelScope.launch {
+            try {
+                val response: Response<ApiResponse<String>> = ApiClient.apiService.deletePet(petId)
+                if (response.isSuccessful) {
+                    _deleteResult.postValue(true)
+                } else {
+                    _deleteResult.postValue(false)
+                    _error.postValue(response.errorBody()?.string() ?: "Unknown error")
+                }
+            } catch (e: Exception) {
+                _error.postValue("Failed to delete pet: ${e.message}")
+            }
+        }
+    }
+
+    fun fetchCurrentUserId() {
+        viewModelScope.launch {
+            try {
+                val response = ApiClient.apiService.getCurrentUserId()
+                if (response.isSuccessful) {
+                    val userId = response.body()?.data
+                    if (userId != null) {
+                        _currentUserId.postValue(userId)
+                    } else {
+                        _error.postValue("Failed to fetch user ID: Data is null")
+                    }
+                } else {
+                    _error.postValue("Failed to fetch user ID: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                _error.postValue("Error fetching user ID: ${e.message}")
+            }
+        }
+    }
 
     // Update pet details
     fun updatePetDetails(petId: Long, petUpdateModel: PetUpdateModel) {

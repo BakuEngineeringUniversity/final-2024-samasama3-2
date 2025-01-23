@@ -6,12 +6,27 @@ import com.example.petpal.models.RegisterUserModel
 import com.example.petpal.models.PetUpdateModel
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService {
+
+    @GET("/api/pets/{id}")
+    suspend fun getPetById(
+        @Path("id") petId: Long
+    ): Response<ApiResponse<PetModel>>
+
+
+    @GET("/api/pets/currentuserid")
+    suspend fun getCurrentUserId(): Response<ApiResponse<Long>>
+
+    @GET("/api/pets/user/{userId}")
+    suspend fun getPetsByUserId(
+        @Path("userId") userId: Long
+    ): Response<ApiResponse<List<PetModel>>>
 
     @POST("/api/auth/register")
     suspend fun registerUser(
@@ -23,16 +38,10 @@ interface ApiService {
         @Body loginUserDto: LoginUserModel
     ): Response<ApiResponse<Map<String, Any>>>
 
-    @GET("/api/pets/{id}")
-    suspend fun getPetById(
-        @Path("id") petId: Long
-    ): Response<ApiResponse<PetModel>>
-
-    @GET("/api/pets/user/{userId}")
-    suspend fun getPetsByUserId(
-        @Path("userId") userId: Long
-    ): Response<ApiResponse<List<PetModel>>>
-
+    @DELETE("/api/pets/{id}")
+    suspend fun deletePet(
+        @Path("id") id: Long
+    ): Response<ApiResponse<String>>
 
     @PUT("/api/pets/{id}")
     suspend fun updatePet(

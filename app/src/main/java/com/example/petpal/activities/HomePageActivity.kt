@@ -1,5 +1,6 @@
 package com.example.petpal.activities
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,7 @@ class HomePageActivity : AppCompatActivity() {
 
     private lateinit var welcomeMessageTextView: TextView
     private lateinit var editPetButton: ImageButton
+    private lateinit var deletePetButton: ImageButton
 
     // Declare the PetViewModel
     private val petViewModel: PetViewModel by viewModels()
@@ -30,6 +32,7 @@ class HomePageActivity : AppCompatActivity() {
         // Initialize UI components
         welcomeMessageTextView = findViewById(R.id.welcomeMessage)
         editPetButton = findViewById(R.id.editPetButton)
+        deletePetButton = findViewById(R.id.deletePetButton)
 
         // Get the Pet ID from the Intent
         val petId = intent.getLongExtra("PET_ID", -1L)
@@ -52,6 +55,65 @@ class HomePageActivity : AppCompatActivity() {
             updateIntent.putExtra("PET_ID", petId)
             startActivity(updateIntent)
         }
+
+        // Set up the Delete button click listener
+        deletePetButton.setOnClickListener {
+            showDeleteConfirmationDialog(petId)
+        }
+    }
+
+    /**
+     * Show a confirmation dialog before deleting a pet.
+     */
+    private fun showDeleteConfirmationDialog(petId: Long) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Delete Pet")
+        builder.setMessage("Are you sure you want to delete this pet? This action cannot be undone.")
+
+        // Handle "Yes" click
+        builder.setPositiveButton("Yes") { dialog, _ ->
+            deletePet(petId) // Call delete logic
+            dialog.dismiss()
+        }
+
+        // Handle "No" click
+        builder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss() // Close the dialog
+        }
+
+        // Show the dialog
+        builder.create().show()
+    }
+
+    /**
+     * Delete the pet by its ID.
+     */
+    private fun deletePet(petId: Long) {
+        Log.d("HomePageActivity", "Attempting to delete pet with ID: $petId")
+        petViewModel.deletePet(petId)
+
+        // Observe the delete result
+        petViewModel.deleteResult.observe(this, Observer { isSuccess ->
+            if (isSuccess) {
+                Log.d("HomePageActivity", "Pet deleted successfully.")
+                Toast.makeText(this, "Pet deleted successfully!", Toast.LENGTH_SHORT).show()
+
+                // Optionally, navigate back or refresh the UI
+                finish() // Close this activity
+            } else {
+                Log.e("HomePageActivity", "Failed to delete pet.")
+                Toast.makeText(this, "Failed to delete pet. Please try again.", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        // Observe errors
+        petViewModel.error.observe(this, Observer { errorMessage ->
+            errorMessage?.let {
+                Log.e("HomePageActivity", "Error during deletion: $it")
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                petViewModel.clearError()
+            }
+        })
     }
 
     /**
