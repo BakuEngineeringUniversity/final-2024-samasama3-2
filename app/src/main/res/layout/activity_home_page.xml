@@ -24,7 +24,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/petpal_logo"
-            android:contentDescription="PetPal Logo" />
+            android:contentDescription="@string/app_logo" />
 
         <TextView
             android:id="@+id/appTitle"
@@ -268,8 +268,8 @@
     <!-- Footer Navigation Section -->
     <androidx.cardview.widget.CardView
         android:id="@+id/footerNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="500dp"
+        android:layout_height="70dp"
         app:cardCornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -280,23 +280,28 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="102dp"
             android:orientation="horizontal"
             android:padding="16dp">
 
+
             <!-- Edit Button -->
+
+            <!-- Spacer -->
+
             <ImageButton
                 android:id="@+id/editPetButton"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:src="@drawable/pencil_logo"
+                android:clickable="true"
+                android:focusable="true"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/update_pet_info"
                 android:scaleType="fitCenter"
-                app:tint="@color/electric"
-                android:contentDescription="@string/update_pet_info" />
+                android:src="@drawable/pencil_logo"
+                app:tint="@color/electric" />
 
-            <!-- Spacer -->
             <View
                 android:layout_width="0dp"
                 android:layout_height="48dp"
@@ -308,11 +313,11 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:src="@drawable/bin_logo"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/delete_pet"
                 android:scaleType="fitCenter"
-                app:tint="@color/electric"
-                android:contentDescription="@string/delete_pet" />
+                android:src="@drawable/bin_logo"
+                app:tint="@color/electric" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

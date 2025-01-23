@@ -68,9 +68,25 @@
     <string name="update_pet_info">Update Pet Info</string>
     <string name="delete_pet">Delete Pet</string>
     <string name="delete_pet_confirmation">Are you sure you want to delete this pet?</string>
-    <string name="yes_button">Yes</string>
-    <string name="no_button">No</string>
-    <string name="pet_type_placeholder">Type: [Pet Type]</string>
-    <string name="pet_age_placeholder">Age: [Pet Age]</string>
+    <string name="save_button">Save</string>
+    <string name="cancel_button1">Cancel</string>
+
+    <string name="update_pet_label">Update Your Pets Information</string>
+    <string name="update_pet_name_hint">Enter your pets new name</string>
+    <string name="update_pet_type_hint">Fix your pets type (e.g., Dog, Cat)</string>
+    <string name="update_pet_age_hint">Fix your pets age</string>
+    <string name="update_pet_sex_hint">Select your pets sex</string>
+
+    <string name="ok_button">OK</string>
+    <string name="cancel_button2">Cancel</string>
+    <string name="sex_male">Male</string>
+    <string name="sex_female">Female</string>
+    <string name="sex_other">Other</string>
+    <string name="error_pet_name">Please enter a valid pet name</string>
+    <string name="error_pet_type">Please select a valid pet type</string>
+    <string name="error_pet_age">Please enter a valid age for your pet</string>
+    <string name="error_pet_sex">Please select a valid sex for your pet</string>
+    <string name="update_pet_success">Your pets information has been successfully updated!</string>
+
 
 </resources>

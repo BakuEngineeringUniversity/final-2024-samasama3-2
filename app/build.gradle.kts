@@ -35,6 +35,7 @@ android {
 
 dependencies {
     // Core Android dependencies
+    implementation("com.auth0.android:jwtdecode:2.0.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

@@ -1,18 +1,17 @@
 package com.example.petpal.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.petpal.R
-import com.example.petpal.api.ApiClient
 import com.example.petpal.models.PetUpdateModel
+import com.example.petpal.viewmodels.PetViewModel
 import com.example.petpal.enums.Sex
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class UpdatePetActivity : AppCompatActivity() {
 
@@ -20,105 +19,126 @@ class UpdatePetActivity : AppCompatActivity() {
     private lateinit var typeEditText: EditText
     private lateinit var sexSpinner: Spinner
     private lateinit var ageEditText: EditText
-    private lateinit var saveButton: Button
+    private lateinit var okButton: Button
+    private lateinit var cancelButton: Button
 
-    private var petId: Long = -1
+    private var petId: Long = -1L
+    private lateinit var petViewModel: PetViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_pet)
 
         // Initialize UI components
-        nameEditText = findViewById(R.id.nameEditText)
-        typeEditText = findViewById(R.id.typeEditText)
-        sexSpinner = findViewById(R.id.sexSpinner)
-        ageEditText = findViewById(R.id.ageEditText)
-        saveButton = findViewById(R.id.saveButton)
+        initializeUIComponents()
 
-        // Get the Pet ID from the intent
-        petId = intent.getLongExtra("PET_ID", -1)
+        // Get the Pet ID from the Intent
+        petId = intent.getLongExtra("PET_ID", -1L)
+
+        // Validate the petId
         if (petId == -1L) {
-            Toast.makeText(this, "Invalid Pet ID", Toast.LENGTH_SHORT).show()
+            showToast("Invalid Pet ID")
+            Log.e("UpdatePetActivity", "Pet ID not provided or invalid")
             finish()
             return
         }
 
+        // Additional validation for invalid IDs (e.g., petId == 1L)
+        if (petId == 1L) {
+            showToast("Invalid Pet ID: $petId")
+            Log.e("UpdatePetActivity", "Pet ID is not valid: $petId")
+            finish()
+            return
+        }
+
+        // Initialize ViewModel
+        petViewModel = ViewModelProvider(this).get(PetViewModel::class.java)
+
         // Fetch the existing pet details and populate the UI
         fetchPetDetails()
 
-        // Handle save button click
-        saveButton.setOnClickListener {
+        // Handle button clicks
+        setupButtonListeners()
+    }
+
+    private fun initializeUIComponents() {
+        nameEditText = findViewById(R.id.nameEditText)
+        typeEditText = findViewById(R.id.typeEditText)
+        sexSpinner = findViewById(R.id.sexSpinner)
+        ageEditText = findViewById(R.id.ageEditText)
+        okButton = findViewById(R.id.okButton)
+        cancelButton = findViewById(R.id.cancelButton)
+    }
+
+    private fun setupButtonListeners() {
+        okButton.setOnClickListener {
             updatePetDetails()
+        }
+
+        cancelButton.setOnClickListener {
+            finish()
         }
     }
 
     private fun fetchPetDetails() {
-        // Simulate fetching pet details
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val response = ApiClient.apiService.getPetById(petId)
-                if (response.isSuccessful) {
-                    val pet = response.body()?.data
-                    pet?.let {
-                        nameEditText.setText(it.name)
-                        typeEditText.setText(it.type)
-                        ageEditText.setText(it.age.toString())
-                        sexSpinner.setSelection(if (it.sex == "MALE") 0 else 1) // Assuming "MALE" is index 0
-                    }
-                } else {
-                    Toast.makeText(
-                        this@UpdatePetActivity,
-                        "Failed to fetch pet details",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            } catch (e: Exception) {
-                Toast.makeText(
-                    this@UpdatePetActivity,
-                    "Error fetching pet details: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+        Log.d("UpdatePetActivity", "Fetching details for Pet ID: $petId")
+        petViewModel.fetchPetDetails(petId)
+
+        // Observe pet details
+        petViewModel.petDetails.observe(this) { pet ->
+            pet?.let {
+                nameEditText.setText(it.name)
+                typeEditText.setText(it.type)
+                ageEditText.setText(it.age.toString())
+                sexSpinner.setSelection(if (it.sex == Sex.MALE.name) 0 else 1)
+            } ?: run {
+                showToast("Failed to fetch pet details")
+                Log.e("UpdatePetActivity", "Failed to fetch pet details for Pet ID: $petId")
+            }
+        }
+
+        // Observe errors
+        petViewModel.error.observe(this) { errorMessage ->
+            if (!errorMessage.isNullOrEmpty()) {
+                showToast(errorMessage)
+                Log.e("UpdatePetActivity", "Error fetching pet details: $errorMessage")
             }
         }
     }
 
     private fun updatePetDetails() {
-        val name = nameEditText.text.toString()
-        val type = typeEditText.text.toString()
+        val name = nameEditText.text.toString().trim()
+        val type = typeEditText.text.toString().trim()
         val sex = if (sexSpinner.selectedItem.toString() == "MALE") Sex.MALE else Sex.FEMALE
         val age = ageEditText.text.toString().toIntOrNull()
 
         if (name.isBlank() || type.isBlank() || age == null) {
-            Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show()
+            showToast("Please fill out all fields")
             return
         }
 
         val petUpdateModel = PetUpdateModel(name, type, sex, age)
+        petViewModel.updatePetDetails(petId, petUpdateModel)
 
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val response = ApiClient.apiService.updatePet(petId, petUpdateModel)
-                if (response.isSuccessful) {
-                    Toast.makeText(
-                        this@UpdatePetActivity,
-                        "Pet updated successfully",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    finish() // Go back to the previous activity
-                } else {
-                    Toast.makeText(
-                        this@UpdatePetActivity,
-                        "Failed to update pet",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            } catch (e: Exception) {
-                Toast.makeText(
-                    this@UpdatePetActivity,
-                    "Error updating pet: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+        // Observe update response
+        petViewModel.updateResponse.observe(this) { success ->
+            if (success) {
+                showToast("Pet updated successfully")
+                finish()
+            } else {
+                showToast("Failed to update pet")
             }
         }
+
+        // Observe errors
+        petViewModel.error.observe(this) { errorMessage ->
+            if (!errorMessage.isNullOrEmpty()) {
+                showToast(errorMessage)
+            }
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

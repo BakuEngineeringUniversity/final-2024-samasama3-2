@@ -28,10 +28,15 @@ interface ApiService {
         @Path("id") petId: Long
     ): Response<ApiResponse<PetModel>>
 
+    @GET("/api/pets/user/{userId}")
+    suspend fun getPetsByUserId(
+        @Path("userId") userId: Long
+    ): Response<List<PetModel>> // Assuming you have a `PetModel` class in Android
+
+
     @PUT("/api/pets/{id}")
     suspend fun updatePet(
         @Path("id") petId: Long,
         @Body petUpdateModel: PetUpdateModel
     ): Response<ApiResponse<PetModel>>
-
 }
