@@ -38,11 +38,12 @@ class PetRegisterActivity : AppCompatActivity() {
 
         // Register button click listener
         registerButton.setOnClickListener {
-            val petName = petNameEditText.text.toString()
-            val petType = petTypeEditText.text.toString()
+            val petName = petNameEditText.text.toString().trim()
+            val petType = petTypeEditText.text.toString().trim()
             val petAge = petAgeEditText.text.toString().toIntOrNull()
 
             if (validateFields(petName, petType, petAge)) {
+                // Combine user and pet data into a single model
                 val registerUserModel = RegisterUserModel(
                     email = email,
                     firstName = firstName,
@@ -56,13 +57,13 @@ class PetRegisterActivity : AppCompatActivity() {
                     petAge = petAge!!
                 )
 
+                // Call ViewModel to register user and pet
                 authViewModel.registerUser(registerUserModel)
+                observeRegistrationResponse()
             } else {
                 showToast("Please fill in all fields correctly.")
             }
         }
-
-        observeRegistrationResponse()
     }
 
     private fun setupPetSexSpinner() {
@@ -90,29 +91,18 @@ class PetRegisterActivity : AppCompatActivity() {
     private fun observeRegistrationResponse() {
         authViewModel.authResponse.observe(this) { response ->
             if (response.status == "success") {
-                // Ensure data is a list and extract the first item's id
-                val data = response.data as? List<Map<String, Any>>
-                val petId = data?.firstOrNull()?.get("id") as? Int
-                println("Response data: ${response.data}")
-
-                if (petId != null) {
-                    navigateToHomePage(petId.toLong()) // Convert to Long if needed
-                } else {
-                    showToast("Registration successful, but pet ID is missing.")
-                }
+                showToast("Registration successful!")
+                navigateToLogin()
             } else {
                 showToast(response.message ?: "An error occurred during registration.")
             }
         }
     }
 
-
-    private fun navigateToHomePage(petId: Long) {
-        val intent = Intent(this, HomePageActivity::class.java).apply {
-            putExtra("PET_ID", petId)
-        }
+    private fun navigateToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
-        finish()
+        finish() // Close current activity
     }
 
     private fun validateFields(petName: String, petType: String, petAge: Int?): Boolean {

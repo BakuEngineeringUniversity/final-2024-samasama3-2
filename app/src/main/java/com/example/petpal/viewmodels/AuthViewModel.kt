@@ -41,6 +41,7 @@ class AuthViewModel : ViewModel() {
     }
 
 
+
     // Login a user
     fun loginUser(loginUserDto: LoginUserModel) {
         viewModelScope.launch {
