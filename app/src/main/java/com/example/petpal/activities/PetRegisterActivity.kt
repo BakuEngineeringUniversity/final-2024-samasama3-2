@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.petpal.R
 import com.example.petpal.api.ApiClient
 import com.example.petpal.api.ApiService
-import com.example.petpal.dtos.RegisterUserDto
+import com.example.petpal.models.RegisterUserModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -67,7 +67,7 @@ class PetRegisterActivity : AppCompatActivity() {
             val petAge = petAgeEditText.text.toString().toIntOrNull() ?: 0
 
             if (petName.isNotBlank() && petType.isNotBlank() && petAge > 0 && selectedPetSex != null) {
-                val registerUserDto = RegisterUserDto(
+                val registerUserModel = RegisterUserModel(
                     email = email ?: "",
                     firstName = firstName ?: "",
                     surname = surname ?: "",
@@ -81,20 +81,20 @@ class PetRegisterActivity : AppCompatActivity() {
                 )
 
                 // Log the payload being sent
-                println("RegisterUserDto: $registerUserDto")
+                println("RegisterUserDto: $registerUserModel")
 
                 // Call the API to register the user
-                registerUser(registerUserDto)
+                registerUser(registerUserModel)
             } else {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun registerUser(registerUserDto: RegisterUserDto) {
+    private fun registerUser(registerUserModel: RegisterUserModel) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiService.registerUser(registerUserDto)
+                val response = apiService.registerUser(registerUserModel)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
                         Toast.makeText(this@PetRegisterActivity, "Registration successful!", Toast.LENGTH_SHORT).show()

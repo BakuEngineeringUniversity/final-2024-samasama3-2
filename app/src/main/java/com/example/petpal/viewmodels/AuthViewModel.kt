@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.petpal.api.ApiClient
 import com.example.petpal.api.ApiResponse
 import com.example.petpal.api.ApiService
-import com.example.petpal.dtos.LoginUserDto
-import com.example.petpal.dtos.RegisterAdminDto
-import com.example.petpal.dtos.RegisterUserDto
+import com.example.petpal.models.LoginUserDto
+import com.example.petpal.models.RegisterAdminDto
+import com.example.petpal.models.RegisterUserModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
@@ -24,10 +24,10 @@ class AuthViewModel : ViewModel() {
     val loginResponse: LiveData<ApiResponse<Map<String, Any>>> get() = _loginResponse
 
     // Register a user
-    fun registerUser(registerUserDto: RegisterUserDto) {
+    fun registerUser(registerUserModel: RegisterUserModel) {
         viewModelScope.launch {
             try {
-                val response = apiService.registerUser(registerUserDto)
+                val response = apiService.registerUser(registerUserModel)
                 processResponse(response, _authResponse)
             } catch (e: Exception) {
                 _authResponse.postValue(ApiResponse("error", "An error occurred: ${e.message}", null))

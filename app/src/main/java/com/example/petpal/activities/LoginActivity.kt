@@ -9,7 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.petpal.R
-import com.example.petpal.dtos.LoginUserDto
+import com.example.petpal.models.LoginUserModel
 import com.example.petpal.utils.TokenManager
 import com.example.petpal.viewmodels.AuthViewModel
 import android.widget.TextView
@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString()
 
             if (email.isNotBlank() && password.isNotBlank()) {
-                val loginUserDto = LoginUserDto(email, password)
+                val loginUserDto = LoginUserModel(email, password)
                 authViewModel.loginUser(loginUserDto)
             } else {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()

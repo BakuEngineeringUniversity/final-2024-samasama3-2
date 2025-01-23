@@ -38,7 +38,7 @@
     <string name="pet_age_hint">Pet Age (e.g., 3)</string>
     <string name="register_button">Register</string>
 
-    <string name="welcome_back">This is, [Pet Name] diary </string>
+    <string name="welcome_back">This is, %1$ss diary </string>
     <string name="welcome_subtext">Take a look at how the day was planned for your pet </string>
 
     <!-- Calendar Section -->

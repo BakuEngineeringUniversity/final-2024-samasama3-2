@@ -1,6 +1,6 @@
-package com.example.petpal.dtos
+package com.example.petpal.models
 
-data class RegisterUserDto(
+data class RegisterUserModel(
     val email: String,
     val firstName: String,
     val surname: String,
