@@ -2,16 +2,12 @@ package com.example.petpal.activities
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.petpal.R
 import com.example.petpal.models.PetUpdateModel
 import com.example.petpal.viewmodels.PetViewModel
-import com.example.petpal.enums.Sex
 
 class UpdatePetActivity : AppCompatActivity() {
 
@@ -29,35 +25,19 @@ class UpdatePetActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_pet)
 
-        // Initialize UI components
         initializeUIComponents()
 
-        // Get the Pet ID from the Intent
         petId = intent.getLongExtra("PET_ID", -1L)
-
-        // Validate the petId
         if (petId == -1L) {
             showToast("Invalid Pet ID")
-            Log.e("UpdatePetActivity", "Pet ID not provided or invalid")
             finish()
             return
         }
 
-        // Additional validation for invalid IDs (e.g., petId == 1L)
-        if (petId == 1L) {
-            showToast("Invalid Pet ID: $petId")
-            Log.e("UpdatePetActivity", "Pet ID is not valid: $petId")
-            finish()
-            return
-        }
-
-        // Initialize ViewModel
         petViewModel = ViewModelProvider(this).get(PetViewModel::class.java)
 
-        // Fetch the existing pet details and populate the UI
-        fetchPetDetails()
-
-        // Handle button clicks
+        setupSpinner() // Populate the spinner with options
+        fetchAndDisplayPetDetails()
         setupButtonListeners()
     }
 
@@ -70,6 +50,43 @@ class UpdatePetActivity : AppCompatActivity() {
         cancelButton = findViewById(R.id.cancelButton)
     }
 
+    private fun setupSpinner() {
+        // Define the options for the spinner
+        val sexes = listOf("MALE", "FEMALE")
+
+        // Set up an ArrayAdapter to populate the spinner
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            sexes
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sexSpinner.adapter = adapter
+    }
+
+    private fun fetchAndDisplayPetDetails() {
+        petViewModel.fetchPetDetails(petId)
+
+        petViewModel.petDetails.observe(this) { pet ->
+            pet?.let {
+                nameEditText.setText(it.name)
+                typeEditText.setText(it.type)
+                ageEditText.setText(it.age.toString())
+
+                // Set spinner selection based on the pet's sex
+                val position = if (it.sex == "MALE") 0 else 1
+                sexSpinner.setSelection(position)
+            } ?: showToast("Failed to fetch pet details")
+        }
+
+        petViewModel.error.observe(this) { errorMessage ->
+            errorMessage?.let {
+                showToast(it)
+                Log.e("UpdatePetActivity", "Error fetching pet details: $it")
+            }
+        }
+    }
+
     private fun setupButtonListeners() {
         okButton.setOnClickListener {
             updatePetDetails()
@@ -80,36 +97,10 @@ class UpdatePetActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchPetDetails() {
-        Log.d("UpdatePetActivity", "Fetching details for Pet ID: $petId")
-        petViewModel.fetchPetDetails(petId)
-
-        // Observe pet details
-        petViewModel.petDetails.observe(this) { pet ->
-            pet?.let {
-                nameEditText.setText(it.name)
-                typeEditText.setText(it.type)
-                ageEditText.setText(it.age.toString())
-                sexSpinner.setSelection(if (it.sex == Sex.MALE.name) 0 else 1)
-            } ?: run {
-                showToast("Failed to fetch pet details")
-                Log.e("UpdatePetActivity", "Failed to fetch pet details for Pet ID: $petId")
-            }
-        }
-
-        // Observe errors
-        petViewModel.error.observe(this) { errorMessage ->
-            if (!errorMessage.isNullOrEmpty()) {
-                showToast(errorMessage)
-                Log.e("UpdatePetActivity", "Error fetching pet details: $errorMessage")
-            }
-        }
-    }
-
     private fun updatePetDetails() {
         val name = nameEditText.text.toString().trim()
         val type = typeEditText.text.toString().trim()
-        val sex = if (sexSpinner.selectedItem.toString() == "MALE") Sex.MALE else Sex.FEMALE
+        val sex = sexSpinner.selectedItem.toString() // Get selected sex
         val age = ageEditText.text.toString().toIntOrNull()
 
         if (name.isBlank() || type.isBlank() || age == null) {
@@ -120,7 +111,6 @@ class UpdatePetActivity : AppCompatActivity() {
         val petUpdateModel = PetUpdateModel(name, type, sex, age)
         petViewModel.updatePetDetails(petId, petUpdateModel)
 
-        // Observe update response
         petViewModel.updateResponse.observe(this) { success ->
             if (success) {
                 showToast("Pet updated successfully")
@@ -130,10 +120,9 @@ class UpdatePetActivity : AppCompatActivity() {
             }
         }
 
-        // Observe errors
         petViewModel.error.observe(this) { errorMessage ->
-            if (!errorMessage.isNullOrEmpty()) {
-                showToast(errorMessage)
+            errorMessage?.let {
+                showToast(it)
             }
         }
     }
